@@ -1,0 +1,23 @@
+# CMake build directories and generated build files
+/build*/
+/cmake-build-*/
+CMakeUserPresets.json
+
+# Generated test and benchmark output
+/tests/output/
+/benchmark-results/
+
+# Local IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local OS files
+.DS_Store
+Thumbs.db
+
+# Internal project workflow documents
+/PRE_PUBLISH_CHECKLIST.md
+/RESUME_INSTRUCTIONS.md
+/STAGE*_SUMMARY.md

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=FluxConvert
+Comment=Offline image and PDF converter
+Exec=fluxconvert-gui %U
+Icon=org.fluxconvert.FluxConvert
+Terminal=false
+Categories=Graphics;
+MimeType=image/png;image/jpeg;application/pdf;
+Keywords=convert;image;pdf;png;jpeg;offline;
+StartupNotify=true
