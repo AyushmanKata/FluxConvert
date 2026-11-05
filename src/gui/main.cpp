@@ -6,7 +6,7 @@
 #include <iostream>
 
 int main(int argc, char* argv[]) {
-    auto app = Gtk::Application::create("org.fluxconvert.app");
+    auto app = Gtk::Application::create("org.fluxconvert.FluxConvert");
 
     // Load CSS for custom styling
     auto css_provider = Gtk::CssProvider::create();
