@@ -9,6 +9,7 @@ Zorin OS as the primary target and minimal resource footprint.
 
 <p align="center">
   <img src="docs/images/fluxconvert-gui.png" alt="FluxConvert desktop application" width="420">
+  <img src="docs/images/fluxconvert-gui-options.png" alt="FluxConvert conversion options" width="420">
 </p>
 
 **Version**: 1.0.0
