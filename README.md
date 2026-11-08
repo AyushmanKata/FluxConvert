@@ -7,10 +7,12 @@ Zorin OS as the primary target and minimal resource footprint.
   <img src="packaging/org.fluxconvert.FluxConvert.svg" alt="FluxConvert icon" width="128">
 </p>
 
-<p align="center">
-  <img src="docs/images/fluxconvert-gui.png" alt="FluxConvert desktop application" width="420">
-  <img src="docs/images/fluxconvert-gui-options.png" alt="FluxConvert conversion options" width="420">
-</p>
+<table>
+  <tr>
+    <td><img src="docs/images/fluxconvert-gui.png" alt="FluxConvert desktop application" width="320"></td>
+    <td><img src="docs/images/fluxconvert-gui-options.png" alt="FluxConvert conversion options" width="320"></td>
+  </tr>
+</table>
 
 **Version**: 1.0.0
 **License**: AGPL-3.0-or-later (required by the MuPDF dependency)
