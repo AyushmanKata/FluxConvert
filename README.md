@@ -1,6 +1,7 @@
 # FluxConvert
 
-A fast, offline desktop file converter for Zorin OS with minimal resource footprint.
+A fast, offline desktop file converter for Ubuntu-based Linux systems, with
+Zorin OS as the primary target and minimal resource footprint.
 
 **Version**: 1.0.0
 **License**: AGPL-3.0-or-later (required by the MuPDF dependency)
@@ -31,11 +32,16 @@ A fast, offline desktop file converter for Zorin OS with minimal resource footpr
 ## Requirements
 
 ### Runtime Dependencies
-- Zorin OS 17 / Ubuntu 24.04 or later
+- Ubuntu 24.04 LTS or later, including compatible Ubuntu-based distributions
+  such as Zorin OS 17 or later. Zorin OS is the primary tested target.
 - GTK4 (≥4.10)
 - libpng (≥1.6)
 - libjpeg-turbo (≥2.0)
 - MuPDF (≥1.23)
+
+The Debian package targets amd64 systems with compatible Ubuntu 24.04
+libraries. Other Linux distributions may work when built from source with
+equivalent dependencies, but are not officially tested.
 
 ### Build Dependencies
 - CMake (≥3.20)

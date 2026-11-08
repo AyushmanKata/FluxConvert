@@ -1,7 +1,8 @@
 # FluxConvert 1.0.0
 
 FluxConvert 1.0.0 is the first stable release of the offline image and PDF
-converter for Ubuntu 24.04 and Zorin OS 17 or later.
+converter for Ubuntu 24.04 and compatible Ubuntu-based distributions.
+Zorin OS 17 or later is the primary tested target.
 
 ## Highlights
 
