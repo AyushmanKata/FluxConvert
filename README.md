@@ -3,6 +3,14 @@
 A fast, offline desktop file converter for Ubuntu-based Linux systems, with
 Zorin OS as the primary target and minimal resource footprint.
 
+<p align="center">
+  <img src="packaging/org.fluxconvert.FluxConvert.svg" alt="FluxConvert icon" width="128">
+</p>
+
+<p align="center">
+  <img src="docs/images/fluxconvert-gui.png" alt="FluxConvert desktop application" width="420">
+</p>
+
 **Version**: 1.0.0
 **License**: AGPL-3.0-or-later (required by the MuPDF dependency)
 
@@ -130,8 +138,6 @@ fluxconvert-cli page1.jpg page2.jpg page3.jpg --output document.pdf
 | PDF → PNG      | ✓ (pages)   | ✓     | N/A            |
 | PDF → JPEG     | ✓ (pages)   | ✓     | N/A            |
 
-**Note**: JPG and JPEG extensions are equivalent.
-
 ## Known Limitations
 
 - Encrypted PDFs are not supported.
@@ -234,20 +240,6 @@ Contributions are welcome! Please ensure:
 - Memory leaks checked (sanitizers)
 - Documentation updated
 
-## Project Status
-
-**Current Stage**: Stage 8 Complete - Release validation and Debian packaging
-
-### Roadmap
-- [x] Stage 1: Architecture and dependency selection
-- [x] Stage 2: Core interfaces and test infrastructure
-- [x] Stage 3: Image conversion engine (PNG/JPEG)
-- [x] Stage 4: PDF generation
-- [x] Stage 5: PDF rendering integration
-- [x] Stage 6: GUI implementation
-- [x] Stage 7: Optimization and benchmarking
-- [x] Stage 8: Release validation and Debian packaging
-
 ## Support
 
 For issues, questions, or contributions, please open an issue on GitHub.
@@ -260,5 +252,3 @@ For issues, questions, or contributions, please open an issue on GitHub.
 - **GTK Project**: Desktop toolkit
 
 ---
-
-**Note**: This is a work in progress. Not all features are implemented yet.
