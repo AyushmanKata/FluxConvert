@@ -13,6 +13,7 @@
 #include <fstream>
 #include <cassert>
 #include <cmath>
+#include <cstdio>
 
 using namespace converter;
 namespace fs = std::filesystem;
@@ -68,6 +69,55 @@ void setup_test_pdfs() {
             "tests/fixtures/test_rgb.png",
             "tests/fixtures/test_rgba.png"
         }, "tests/output/multi_page.pdf", opts);
+    }
+}
+
+void create_oversized_page_pdf(const std::string& path) {
+    const std::vector<std::string> objects = {
+        "<< /Type /Catalog /Pages 2 0 R >>",
+        "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 100000 100000] /Contents 4 0 R /Resources << >> >>",
+        "<< /Length 0 >>\nstream\n\nendstream"
+    };
+
+    std::string data = "%PDF-1.4\n";
+    std::vector<size_t> offsets{0};
+    for (size_t i = 0; i < objects.size(); ++i) {
+        offsets.push_back(data.size());
+        data += std::to_string(i + 1) + " 0 obj\n" + objects[i] + "\nendobj\n";
+    }
+
+    const size_t xref_offset = data.size();
+    data += "xref\n0 5\n0000000000 65535 f \n";
+    for (size_t i = 1; i < offsets.size(); ++i) {
+        char offset[32];
+        std::snprintf(offset, sizeof(offset), "%010zu", offsets[i]);
+        data += std::string(offset) + " 00000 n \n";
+    }
+    data += "trailer\n<< /Size 5 /Root 1 0 R >>\nstartxref\n" +
+            std::to_string(xref_offset) + "\n%%EOF\n";
+
+    std::ofstream file(path, std::ios::binary);
+    file << data;
+}
+
+void test_oversized_pdf_page_rejected() {
+    TEST("Oversized PDF page is rejected before rendering") {
+        const std::string path = "tests/output/oversized_page.pdf";
+        create_oversized_page_pdf(path);
+
+        bool caught_limit = false;
+        try {
+            pdf_render_page(path, 1, 72);
+        } catch (const ResourceLimitError&) {
+            caught_limit = true;
+        }
+
+        assert(caught_limit);
+        assert(!fs::exists("tests/output/oversized_page.png"));
+        PASS();
+    } catch (const std::exception& e) {
+        FAIL(e.what());
     }
 }
 
@@ -516,6 +566,7 @@ int main() {
 
     // Run tests
     test_pdf_page_count();
+    test_oversized_pdf_page_rejected();
     test_pdf_page_info();
     test_render_single_page();
     test_render_dpi_scaling();

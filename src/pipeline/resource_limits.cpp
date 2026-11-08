@@ -12,13 +12,13 @@ void validate_dimensions(uint32_t width, uint32_t height) {
     if (width > MAX_IMAGE_WIDTH) {
         std::ostringstream oss;
         oss << "Image width " << width << " exceeds maximum " << MAX_IMAGE_WIDTH;
-        throw ConversionError(oss.str());
+        throw ResourceLimitError(oss.str());
     }
 
     if (height > MAX_IMAGE_HEIGHT) {
         std::ostringstream oss;
         oss << "Image height " << height << " exceeds maximum " << MAX_IMAGE_HEIGHT;
-        throw ConversionError(oss.str());
+        throw ResourceLimitError(oss.str());
     }
 }
 
@@ -28,7 +28,7 @@ void validate_pixel_count(uint32_t width, uint32_t height) {
     if (pixel_count > MAX_PIXEL_COUNT) {
         std::ostringstream oss;
         oss << "Image pixel count " << pixel_count << " exceeds maximum " << MAX_PIXEL_COUNT;
-        throw ConversionError(oss.str());
+        throw ResourceLimitError(oss.str());
     }
 }
 
@@ -44,7 +44,7 @@ size_t estimate_memory(uint32_t width, uint32_t height, uint8_t channels) {
         std::ostringstream oss;
         oss << "Image memory requirement " << mem_required
             << " bytes exceeds maximum " << MAX_IMAGE_MEMORY;
-        throw ConversionError(oss.str());
+        throw ResourceLimitError(oss.str());
     }
 
     return static_cast<size_t>(mem_required);
@@ -60,7 +60,7 @@ void validate_dpi(int dpi) {
     if (dpi < MIN_DPI || dpi > MAX_DPI) {
         std::ostringstream oss;
         oss << "DPI " << dpi << " is out of valid range [" << MIN_DPI << ", " << MAX_DPI << "]";
-        throw ConversionError(oss.str());
+        throw ResourceLimitError(oss.str());
     }
 }
 

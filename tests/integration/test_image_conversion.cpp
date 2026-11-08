@@ -318,6 +318,43 @@ void test_image_info() {
     }
 }
 
+void test_rejects_input_as_output() {
+    TEST("Conversion request rejects an input path used as output") {
+        ConversionRequest request;
+        request.input_paths = {"tests/fixtures/test_rgb.png"};
+        request.output_path = "tests/fixtures/test_rgb.png";
+        request.output_format = Format::PNG;
+
+        assert(!request.validate());
+        PASS();
+    } catch (const std::exception& e) {
+        FAIL(e.what());
+    }
+}
+
+void test_rejects_input_alias_as_output() {
+    TEST("Conversion request rejects an output alias to an input") {
+        const fs::path alias = "tests/output/test_rgb_alias.png";
+        std::error_code ec;
+        fs::remove(alias, ec);
+        fs::create_symlink(fs::absolute("tests/fixtures/test_rgb.png"), alias, ec);
+        if (ec) {
+            throw std::runtime_error("Unable to create symlink test fixture: " + ec.message());
+        }
+
+        ConversionRequest request;
+        request.input_paths = {"tests/fixtures/test_rgb.png"};
+        request.output_path = alias.string();
+        request.output_format = Format::PNG;
+
+        assert(!request.validate());
+        fs::remove(alias, ec);
+        PASS();
+    } catch (const std::exception& e) {
+        FAIL(e.what());
+    }
+}
+
 int main() {
     std::cout << "=== Image Conversion Integration Tests ===\n\n";
 
@@ -352,6 +389,8 @@ int main() {
     test_format_handler_png_to_jpeg();
     test_format_handler_jpeg_to_png();
     test_image_info();
+    test_rejects_input_as_output();
+    test_rejects_input_alias_as_output();
 
     // Summary
     std::cout << "\n=== Test Summary ===\n";

@@ -11,6 +11,8 @@
 #include <sstream>
 #include <vector>
 #include <cstdio>
+#include <cmath>
+#include <limits>
 
 namespace converter {
 
@@ -89,6 +91,40 @@ struct MuDocument {
     MuDocument& operator=(const MuDocument&) = delete;
 };
 
+void validate_page_render_resources(fz_context* ctx, fz_page* page, int dpi) {
+    fz_rect bounds{};
+    std::string error_msg;
+    bool failed = false;
+
+    fz_try(ctx) {
+        bounds = fz_bound_page(ctx, page);
+    }
+    fz_catch(ctx) {
+        error_msg = fz_caught_message(ctx);
+        failed = true;
+    }
+
+    if (failed) {
+        throw FormatError("Failed to determine PDF page bounds: " + error_msg);
+    }
+
+    const double scale = static_cast<double>(dpi) / 72.0;
+    const double width_pixels = std::ceil(static_cast<double>(bounds.x1 - bounds.x0) * scale);
+    const double height_pixels = std::ceil(static_cast<double>(bounds.y1 - bounds.y0) * scale);
+    if (!std::isfinite(width_pixels) || !std::isfinite(height_pixels) ||
+        width_pixels <= 0.0 || height_pixels <= 0.0 ||
+        width_pixels > static_cast<double>(std::numeric_limits<uint32_t>::max()) ||
+        height_pixels > static_cast<double>(std::numeric_limits<uint32_t>::max())) {
+        throw ResourceLimitError("PDF page dimensions are invalid or exceed supported limits");
+    }
+
+    validate_image_resources(
+        static_cast<uint32_t>(width_pixels),
+        static_cast<uint32_t>(height_pixels),
+        3
+    );
+}
+
 // Internal function to render a single page (0-indexed) to ImageData
 ImageData render_single_page_internal(fz_context* ctx, fz_document* doc, int page_idx, int dpi) {
     validate_dpi(dpi);
@@ -98,11 +134,30 @@ ImageData render_single_page_internal(fz_context* ctx, fz_document* doc, int pag
     std::string error_msg;
     bool failed = false;
 
+    fz_try(ctx) {
+        page = fz_load_page(ctx, doc, page_idx);
+    }
+    fz_catch(ctx) {
+        error_msg = fz_caught_message(ctx);
+        failed = true;
+    }
+
+    if (failed || !page) {
+        throw FormatError("Failed to load PDF page " + std::to_string(page_idx + 1) + ": " + error_msg);
+    }
+
+    try {
+        validate_page_render_resources(ctx, page, dpi);
+    } catch (...) {
+        fz_drop_page(ctx, page);
+        throw;
+    }
+
     float scale = static_cast<float>(dpi) / 72.0f;
     fz_matrix ctm = fz_scale(scale, scale);
 
+    failed = false;
     fz_try(ctx) {
-        page = fz_load_page(ctx, doc, page_idx);
         pix = fz_new_pixmap_from_page(ctx, page, ctm, fz_device_rgb(ctx), 0);
     }
     fz_catch(ctx) {

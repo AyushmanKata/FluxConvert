@@ -1,6 +1,8 @@
 # CMake build directories and generated build files
 /build*/
 /cmake-build-*/
+/_CPack_Packages/
+/*.deb
 CMakeUserPresets.json
 
 # Generated test and benchmark output

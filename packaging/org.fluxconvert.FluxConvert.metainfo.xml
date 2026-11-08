@@ -5,6 +5,9 @@
   <summary>Offline image and PDF converter</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>AGPL-3.0-or-later</project_license>
+  <developer id="org.fluxconvert">
+    <name>FluxConvert contributors</name>
+  </developer>
   <description>
     <p>FluxConvert is a free, offline desktop application for converting PNG, JPEG, and PDF files.</p>
     <p>It supports batch processing, multi-page PDF generation, PDF rendering, and configurable quality and DPI settings.</p>
@@ -15,5 +18,12 @@
     <binary>fluxconvert-cli</binary>
   </provides>
   <url type="homepage">https://github.com/AyushmanKata/FluxConvert</url>
+  <releases>
+    <release version="1.0.0" date="2026-11-08">
+      <description>
+        <p>Initial stable release of FluxConvert with PNG, JPEG, and PDF conversion, batch processing, and desktop integration.</p>
+      </description>
+    </release>
+  </releases>
   <content_rating type="oars-1.1"/>
 </component>

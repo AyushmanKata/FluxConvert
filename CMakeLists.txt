@@ -177,6 +177,9 @@ install(DIRECTORY docs/ DESTINATION share/doc/fluxconvert)
 install(FILES LICENSE LICENSES.md THIRD_PARTY_NOTICES.md README.md
   DESTINATION share/doc/fluxconvert
 )
+install(FILES RELEASE_NOTES.md
+  DESTINATION share/doc/fluxconvert
+)
 
 install(FILES packaging/org.fluxconvert.FluxConvert.desktop
   DESTINATION ${CMAKE_INSTALL_DATADIR}/applications

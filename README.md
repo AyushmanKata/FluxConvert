@@ -2,7 +2,7 @@
 
 A fast, offline desktop file converter for Zorin OS with minimal resource footprint.
 
-**Version**: 1.0 (in development)  
+**Version**: 1.0.0
 **License**: AGPL-3.0-or-later (required by the MuPDF dependency)
 
 ## Features
@@ -67,7 +67,7 @@ sudo cmake --install build
 ### Running Without Installation
 
 ```bash
-./build/bin/fluxconvert-gui
+./build-release/fluxconvert-gui
 ```
 
 ### Debian Package
@@ -126,6 +126,17 @@ fluxconvert-cli page1.jpg page2.jpg page3.jpg --output document.pdf
 
 **Note**: JPG and JPEG extensions are equivalent.
 
+## Known Limitations
+
+- Encrypted PDFs are not supported.
+- File extensions are not a substitute for valid file contents; FluxConvert
+  detects formats from file signatures and may reject files whose names do not
+  match their contents.
+- Very large PDFs require additional resource-limit validation and may use
+  substantial memory while rendering.
+- PDF output is raster-only; OCR, PDF text extraction, forms, and annotations
+  are not supported.
+
 ## Configuration Options
 
 ### JPEG Options
@@ -156,10 +167,10 @@ cmake -B build-release \
 cmake --build build-release -j$(nproc)
 
 # Strip symbols
-strip build-release/bin/fluxconvert-gui
+strip build-release/fluxconvert-gui
 
 # Check binary size
-ls -lh build-release/bin/fluxconvert-gui
+ls -lh build-release/fluxconvert-gui
 ```
 
 ## Testing
@@ -186,7 +197,7 @@ ctest --test-dir build-sanitize
 
 ```bash
 cmake --build build-release --target benchmark
-./build-release/bin/benchmark --iterations 10
+./build-release/benchmark --iterations 10
 ```
 
 See `docs/performance.md` for detailed results.

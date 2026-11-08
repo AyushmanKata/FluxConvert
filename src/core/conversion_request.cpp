@@ -22,6 +22,26 @@ bool ConversionRequest::validate() const {
         return false;
     }
 
+    // Never allow an output path to overwrite one of the source files.
+    // Normalize relative paths so equivalent spellings are treated alike.
+    const auto normalized_path = [](const std::filesystem::path& path) {
+        std::error_code ec;
+        const auto absolute = std::filesystem::absolute(path, ec);
+        return (ec ? path : absolute).lexically_normal();
+    };
+    const auto normalized_output = normalized_path(output_path);
+    for (const auto& input : input_paths) {
+        std::error_code equivalent_error;
+        const bool refers_to_same_file =
+            std::filesystem::exists(output_path, equivalent_error) &&
+            !equivalent_error &&
+            std::filesystem::equivalent(input, output_path, equivalent_error) &&
+            !equivalent_error;
+        if (normalized_path(input) == normalized_output || refers_to_same_file) {
+            return false;
+        }
+    }
+
     // Validate format-specific options
     if (output_format == Format::JPEG) {
         if (jpeg_options.quality < 1 || jpeg_options.quality > 100) {

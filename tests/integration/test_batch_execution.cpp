@@ -180,6 +180,7 @@ void test_batch_progress_reporting() {
 void test_batch_cancellation() {
     TEST("Batch conversion cancellation via CancellationToken") {
         fs::path out_dir = "tests/output/batch_cancel";
+        fs::remove_all(out_dir);
         fs::create_directories(out_dir);
 
         std::vector<std::string> inputs;
@@ -206,6 +207,9 @@ void test_batch_cancellation() {
         assert(!result.all_succeeded);
         assert(result.failure_count() > 0);
         assert(result.file_results.size() == 10);
+        for (const auto& entry : fs::directory_iterator(out_dir)) {
+            assert(entry.path().extension() != ".jpg");
+        }
 
         PASS();
     } catch (const std::exception& e) {

@@ -8,9 +8,39 @@
 #include <vector>
 #include <filesystem>
 #include <algorithm>
+#include <cmath>
+#include <limits>
 
 namespace fs = std::filesystem;
 using namespace converter;
+
+bool parse_integer(const std::string& value, long long minimum, long long maximum, long long& result) {
+    try {
+        size_t parsed = 0;
+        const long long converted = std::stoll(value, &parsed);
+        if (parsed != value.size() || converted < minimum || converted > maximum) {
+            return false;
+        }
+        result = converted;
+        return true;
+    } catch (const std::exception&) {
+        return false;
+    }
+}
+
+bool parse_decimal(const std::string& value, double& result) {
+    try {
+        size_t parsed = 0;
+        const double converted = std::stod(value, &parsed);
+        if (parsed != value.size() || !std::isfinite(converted)) {
+            return false;
+        }
+        result = converted;
+        return true;
+    } catch (const std::exception&) {
+        return false;
+    }
+}
 
 void print_usage(const char* prog) {
     std::cout << "Usage: " << prog << " <input-files...> [options]\n\n"
@@ -62,25 +92,56 @@ int main(int argc, char* argv[]) {
         } else if ((arg == "-f" || arg == "--format") && i + 1 < argc) {
             output_format = extension_to_format(argv[++i]);
         } else if ((arg == "-q" || arg == "--quality") && i + 1 < argc) {
-            quality = std::stoi(argv[++i]);
+            long long parsed = 0;
+            if (!parse_integer(argv[++i], 1, 100, parsed)) {
+                std::cerr << "Error: JPEG quality must be an integer from 1 to 100.\n";
+                return 1;
+            }
+            quality = static_cast<int>(parsed);
         } else if ((arg == "-c" || arg == "--compression") && i + 1 < argc) {
-            compression = std::stoi(argv[++i]);
+            long long parsed = 0;
+            if (!parse_integer(argv[++i], 0, 9, parsed)) {
+                std::cerr << "Error: PNG compression must be an integer from 0 to 9.\n";
+                return 1;
+            }
+            compression = static_cast<int>(parsed);
         } else if (arg == "--dpi" && i + 1 < argc) {
-            dpi = std::stoi(argv[++i]);
+            long long parsed = 0;
+            if (!parse_integer(argv[++i], 72, 600, parsed)) {
+                std::cerr << "Error: DPI must be an integer from 72 to 600.\n";
+                return 1;
+            }
+            dpi = static_cast<int>(parsed);
         } else if (arg == "--margin" && i + 1 < argc) {
-            margin_mm = std::stod(argv[++i]);
+            if (!parse_decimal(argv[++i], margin_mm) || margin_mm < 0.0) {
+                std::cerr << "Error: margin must be a non-negative number.\n";
+                return 1;
+            }
         } else if (arg == "--page-size" && i + 1 < argc) {
             std::string ps = argv[++i];
             if (ps == "a4" || ps == "A4") page_size = PDFWriteOptions::PageSize::A4;
             else if (ps == "letter" || ps == "Letter") page_size = PDFWriteOptions::PageSize::Letter;
-            else page_size = PDFWriteOptions::PageSize::FitToImage;
+            else if (ps == "fit" || ps == "Fit") page_size = PDFWriteOptions::PageSize::FitToImage;
+            else {
+                std::cerr << "Error: page size must be fit, a4, or letter.\n";
+                return 1;
+            }
         } else if (arg == "--orientation" && i + 1 < argc) {
             std::string ori = argv[++i];
             if (ori == "portrait") orientation = PDFWriteOptions::Orientation::Portrait;
             else if (ori == "landscape") orientation = PDFWriteOptions::Orientation::Landscape;
-            else orientation = PDFWriteOptions::Orientation::Auto;
+            else if (ori == "auto") orientation = PDFWriteOptions::Orientation::Auto;
+            else {
+                std::cerr << "Error: orientation must be auto, portrait, or landscape.\n";
+                return 1;
+            }
         } else if ((arg == "-t" || arg == "--threads") && i + 1 < argc) {
-            threads = static_cast<size_t>(std::max(1, std::stoi(argv[++i])));
+            long long parsed = 0;
+            if (!parse_integer(argv[++i], 1, std::numeric_limits<long long>::max(), parsed)) {
+                std::cerr << "Error: thread count must be a positive integer.\n";
+                return 1;
+            }
+            threads = static_cast<size_t>(parsed);
         } else if (arg[0] == '-') {
             std::cerr << "Unknown option: " << arg << "\n";
             return 1;

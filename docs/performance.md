@@ -7,6 +7,25 @@
 
 ---
 
+## Latest release validation (2026-11-08)
+
+The Release preset was rebuilt and the benchmark was rerun for 10 iterations.
+The current run measured a 4.19x speedup from one to twelve batch workers,
+235 MB peak RSS during the benchmark workload, and the following mean timings:
+
+| Scenario | Mean |
+|:---|---:|
+| PNG -> JPEG (1 MP) | 8.82 ms |
+| PNG -> JPEG (4 MP) | 33.06 ms |
+| PNG -> JPEG (16 MP) | 166.48 ms |
+| 10x PNG -> PDF | 237.18 ms |
+| PDF (10 pages) -> PNG at 150 DPI | 727.34 ms |
+
+The historical measurements below remain as the Stage 7 baseline; benchmark
+results vary with CPU, memory pressure, and library versions.
+
+---
+
 ## 1. Executive Summary
 
 This report documents the performance profiling, benchmark suite, and resource utilization measurements conducted during Stage 7. All architectural performance and responsiveness targets defined in [`architecture.md`](architecture.md) were rigorously validated on the target platform (AMD Ryzen 5 7535HS, 12GB RAM).
