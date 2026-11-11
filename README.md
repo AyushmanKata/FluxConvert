@@ -14,7 +14,7 @@ Zorin OS as the primary target and minimal resource footprint.
   </tr>
 </table>
 
-**Version**: 1.0.0
+**Version**: 1.0.1
 **License**: AGPL-3.0-or-later (required by the MuPDF dependency)
 
 ## Features
@@ -111,7 +111,7 @@ cmake --preset release
 cmake --build --preset release
 cd build-release
 cpack -G DEB
-sudo apt install ./fluxconvert_1.0.0_*.deb
+sudo apt install ./fluxconvert_1.0.1_*.deb
 ```
 
 The package installs the GUI launcher, icon, AppStream metadata, CLI, and

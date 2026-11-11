@@ -1,11 +1,13 @@
-# FluxConvert 1.0.0
+# FluxConvert 1.0.1
 
-FluxConvert 1.0.0 is the first stable release of the offline image and PDF
-converter for Ubuntu 24.04 and compatible Ubuntu-based distributions.
+FluxConvert 1.0.1 is a security and reliability update for the offline image
+and PDF converter for Ubuntu 24.04 and compatible Ubuntu-based distributions.
 Zorin OS 17 or later is the primary tested target.
 
 ## Highlights
 
+- Requires MuPDF 1.28.6 or later for PDF rendering security fixes.
+- Explicitly rejects encrypted PDFs instead of rendering them unexpectedly.
 - PNG and JPEG conversion with configurable quality and compression.
 - PNG/JPEG to single- or multi-page PDF conversion.
 - PDF rendering to PNG or JPEG with configurable DPI.
@@ -25,5 +27,5 @@ Zorin OS 17 or later is the primary tested target.
 ## Installation
 
 Build from source using the `release` CMake preset, or install the generated
-`fluxconvert_1.0.0_*.deb` package on a supported Debian-based system. See
+`fluxconvert_1.0.1_*.deb` package on a supported Debian-based system. See
 `README.md` for dependency and usage details.
