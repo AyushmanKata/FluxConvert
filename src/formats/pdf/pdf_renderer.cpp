@@ -67,6 +67,11 @@ struct MuDocument {
         if (!doc) {
             throw FormatError("Failed to open PDF: " + path);
         }
+        if (fz_needs_password(ctx, doc)) {
+            fz_drop_document(ctx, doc);
+            doc = nullptr;
+            throw FormatError("Encrypted PDFs are not supported: " + path);
+        }
     }
 
     ~MuDocument() {

@@ -151,13 +151,16 @@ To prevent resource exhaustion:
 ## Format Detection
 
 Format detection uses **magic number** (file signature) checking rather than
-relying solely on file extensions:
+relying on file extensions:
 
 1. Check file signature
-2. Fall back to extension if signature not recognized
-3. Reject files with mismatched signatures and extensions
+2. Reject files whose signature is unknown or whose contents are malformed
 
-This prevents accidental processing of incorrectly-named files.
+The detected signature is authoritative, so a valid file can still be
+converted when its filename extension is incorrect. Output naming follows the
+requested output format.
+
+This prevents accidental processing of unknown or malformed files.
 
 ## Future Format Support
 

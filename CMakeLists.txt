@@ -50,12 +50,27 @@ pkg_check_modules(PNG REQUIRED IMPORTED_TARGET libpng)
 pkg_check_modules(JPEG REQUIRED IMPORTED_TARGET libjpeg)
 
 # MuPDF (requires manual configuration as it often lacks pkg-config)
+set(MUPDF_MIN_VERSION "1.28.6")
 find_path(MUPDF_INCLUDE_DIR mupdf/fitz.h)
 find_library(MUPDF_LIBRARY NAMES mupdf)
 find_library(MUPDF_THIRD_LIBRARY NAMES mupdf-third)
 
 if(NOT MUPDF_INCLUDE_DIR OR NOT MUPDF_LIBRARY)
-  message(FATAL_ERROR "MuPDF not found. Install libmupdf-dev")
+  message(FATAL_ERROR
+    "MuPDF not found. Build MuPDF ${MUPDF_MIN_VERSION} or newer and pass "
+    "MUPDF_INCLUDE_DIR, MUPDF_LIBRARY, and MUPDF_THIRD_LIBRARY.")
+endif()
+
+file(STRINGS "${MUPDF_INCLUDE_DIR}/mupdf/fitz/version.h" MUPDF_VERSION_LINE
+  REGEX "^#define FZ_VERSION ")
+string(REGEX REPLACE ".*\"([0-9]+\\.[0-9]+\\.[0-9]+)\".*" "\\1"
+  MUPDF_VERSION_MATCH
+  "${MUPDF_VERSION_LINE}")
+if(NOT MUPDF_VERSION_MATCH OR MUPDF_VERSION_MATCH VERSION_LESS MUPDF_MIN_VERSION)
+  message(FATAL_ERROR
+    "MuPDF ${MUPDF_MIN_VERSION} or newer is required; found "
+    "${MUPDF_VERSION_MATCH}. Build a newer MuPDF from source and pass "
+    "MUPDF_INCLUDE_DIR, MUPDF_LIBRARY, and MUPDF_THIRD_LIBRARY.")
 endif()
 
 # MuPDF transitive dependencies for static linking

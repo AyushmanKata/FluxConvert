@@ -48,7 +48,7 @@ Zorin OS as the primary target and minimal resource footprint.
 - GTK4 (≥4.10)
 - libpng (≥1.6)
 - libjpeg-turbo (≥2.0)
-- MuPDF (≥1.23)
+- MuPDF (≥1.28.6)
 
 The Debian package targets amd64 systems with compatible Ubuntu 24.04
 libraries. Other Linux distributions may work when built from source with
@@ -65,16 +65,31 @@ equivalent dependencies, but are not officially tested.
 ### From Source
 
 ```bash
-# Install dependencies
+# Install dependencies other than MuPDF
 sudo apt-get install cmake g++ pkg-config \
-  libgtkmm-4.0-dev libpng-dev libjpeg-turbo8-dev libmupdf-dev
+  libgtkmm-4.0-dev libpng-dev libjpeg-turbo8-dev
+```
 
 # Clone repository
 git clone https://github.com/AyushmanKata/FluxConvert.git
 cd fluxconvert
 
+Ubuntu 24.04/Zorin repositories currently provide an older MuPDF package.
+Build MuPDF 1.28.6 or later separately, then pass its include and library
+paths when configuring FluxConvert:
+
+```bash
+curl -LO https://github.com/ArtifexSoftware/mupdf-downloads/releases/download/1.28.6/mupdf-1.28.6-source.tar.gz
+tar -xzf mupdf-1.28.6-source.tar.gz
+make -C mupdf-1.28.6-source -j$(nproc) libs \
+  HAVE_GLUT=no HAVE_X11=no USE_SYSTEM_LIBJPEG=yes USE_SYSTEM_OPENJPEG=no
+
+cmake -B build -DCMAKE_BUILD_TYPE=Release \
+  -DMUPDF_INCLUDE_DIR="$PWD/mupdf-1.28.6-source/include" \
+  -DMUPDF_LIBRARY="$PWD/mupdf-1.28.6-source/build/release/libmupdf.a" \
+  -DMUPDF_THIRD_LIBRARY="$PWD/mupdf-1.28.6-source/build/release/libmupdf-third.a"
+
 # Build
-cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j$(nproc)
 
 # Install (optional)

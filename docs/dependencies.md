@@ -1,6 +1,6 @@
 # Dependency Decision Record
 
-**Date**: 2026-10-24  
+**Date**: 2026-11-11
 **System**: Zorin OS 17 (Ubuntu 24.04 base), Linux kernel 7.0.0-38-generic  
 **Hardware**: AMD Ryzen 5 7535HS, 12GB RAM, 12 cores
 
@@ -59,7 +59,7 @@
 - **Not implemented**: Text rendering, forms, annotations, encryption
 
 #### PDF Rendering (Reading)
-- **Library**: MuPDF 1.23.10
+- **Library**: MuPDF 1.28.6 or later
 - **License**: AGPL-3+
 - **Rationale**:
   - Compact and fast
@@ -105,12 +105,24 @@
 ### Ubuntu/Zorin OS
 ```bash
 # Runtime dependencies (minimal)
-sudo apt-get install libgtk-4-1 libgtkmm-4.0-0 libpng16-16 libjpeg-turbo8 libmupdf
+sudo apt-get install libgtk-4-1 libgtkmm-4.0-0 libpng16-16 libjpeg-turbo8
 
-# Build dependencies
+# Build dependencies other than MuPDF
 sudo apt-get install cmake g++ pkg-config \
-  libgtkmm-4.0-dev libpng-dev libjpeg-turbo8-dev libmupdf-dev
+  libgtkmm-4.0-dev libpng-dev libjpeg-turbo8-dev
 ```
+
+Ubuntu 24.04/Zorin repositories currently provide MuPDF 1.23.10, below the
+security baseline enforced by `CMakeLists.txt`. Build MuPDF 1.28.6 or later
+from the official source with system JPEG support:
+
+```bash
+make -C mupdf-1.28.6-source -j$(nproc) libs \
+  HAVE_GLUT=no HAVE_X11=no USE_SYSTEM_LIBJPEG=yes USE_SYSTEM_OPENJPEG=no
+```
+
+Configure FluxConvert with `MUPDF_INCLUDE_DIR`, `MUPDF_LIBRARY`, and
+`MUPDF_THIRD_LIBRARY` pointing to that MuPDF build.
 
 ## Rejected Dependencies
 
@@ -138,7 +150,7 @@ sudo apt-get install cmake g++ pkg-config \
 
 ## Dependency Verification
 
-All dependencies are:
+All runtime dependencies other than the MuPDF security baseline are:
 ✓ Available in Ubuntu 24.04 repositories  
 ✓ Actively maintained  
 ✓ Security-patched by distribution  
