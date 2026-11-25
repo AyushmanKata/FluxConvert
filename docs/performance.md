@@ -7,22 +7,24 @@
 
 ---
 
-## Latest release validation (2026-11-08)
+## Latest release validation (2026-11-25)
 
-The Release preset was rebuilt and the benchmark was rerun for 10 iterations.
-The current run measured a 4.19x speedup from one to twelve batch workers,
-235 MB peak RSS during the benchmark workload, and the following mean timings:
+The Release benchmark was rerun for 10 iterations. The current run measured a
+3.44x speedup from one to twelve batch workers, 199 MB peak RSS during the
+benchmark workload, and the following mean timings:
 
 | Scenario | Mean |
 |:---|---:|
-| PNG -> JPEG (1 MP) | 8.82 ms |
-| PNG -> JPEG (4 MP) | 33.06 ms |
-| PNG -> JPEG (16 MP) | 166.48 ms |
-| 10x PNG -> PDF | 237.18 ms |
-| PDF (10 pages) -> PNG at 150 DPI | 727.34 ms |
+| PNG -> JPEG (1 MP) | 9.59 ms |
+| PNG -> JPEG (4 MP) | 34.15 ms |
+| PNG -> JPEG (16 MP) | 168.41 ms |
+| 10x PNG -> PDF | 264.79 ms |
+| PDF (10 pages) -> PNG at 150 DPI | 742.04 ms |
 
-The historical measurements below remain as the Stage 7 baseline; benchmark
-results vary with CPU, memory pressure, and library versions.
+Full benchmark metrics and the final Release test results are archived in
+[`release-validation-v1.0.1.md`](release-validation-v1.0.1.md). Historical
+measurements below remain as the Stage 7 baseline; benchmark results vary with
+CPU, memory pressure, and library versions.
 
 ---
 

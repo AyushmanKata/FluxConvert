@@ -29,3 +29,10 @@ Zorin OS 17 or later is the primary tested target.
 Build from source using the `release` CMake preset, or install the generated
 `fluxconvert_1.0.1_*.deb` package on a supported Debian-based system. See
 `README.md` for dependency and usage details.
+
+## SHA-256 checksums
+
+| Release asset | SHA-256 |
+|:---|:---|
+| `fluxconvert-1.0.1.tar.gz` | `852079284ee2880102f7c633474f46dde7d045cccea3160365223cd11d1666ec` |
+| `fluxconvert_1.0.1_amd64.deb` | `94f89d537dfd554f0cce0b65856411d3a1bf64458dc212be32b6c784de7de017` |
